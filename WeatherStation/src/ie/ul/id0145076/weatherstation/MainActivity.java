@@ -129,7 +129,7 @@ public class MainActivity extends Activity implements SensorEventListener, Locat
 				//startActivity(viewWeatherReadingIntent);
 				
 				//start map view as intent
-				Intent viewMapIntent = new Intent(getBaseContext(), MapActivity.class);
+				Intent viewMapIntent = new Intent(getBaseContext(), MapViewActivity.class);
 				startActivity(viewMapIntent);
 				
 			}

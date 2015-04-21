@@ -476,7 +476,7 @@ containing a value of this type.
         public static final int powered_by_google_light=0x7f020020;
     }
     public static final class id {
-        public static final int action_settings=0x7f0b0020;
+        public static final int action_settings=0x7f0b001f;
         public static final int adjust_height=0x7f0b0000;
         public static final int adjust_width=0x7f0b0001;
         public static final int book_now=0x7f0b0010;
@@ -484,7 +484,6 @@ containing a value of this type.
         public static final int buy_now=0x7f0b0011;
         public static final int buy_with_google=0x7f0b0012;
         public static final int classic=0x7f0b0014;
-        public static final int container=0x7f0b001d;
         public static final int database_contents=0x7f0b001e;
         public static final int donate_with_google=0x7f0b0013;
         public static final int grayscale=0x7f0b0015;
@@ -492,7 +491,7 @@ containing a value of this type.
         public static final int holo_light=0x7f0b0008;
         public static final int hybrid=0x7f0b0003;
         public static final int location=0x7f0b001c;
-        public static final int map=0x7f0b001f;
+        public static final int map=0x7f0b001d;
         public static final int match_parent=0x7f0b000e;
         public static final int monochrome=0x7f0b0016;
         public static final int none=0x7f0b0002;
@@ -515,14 +514,14 @@ containing a value of this type.
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
-        public static final int activity_map=0x7f030001;
+        public static final int activity_map_view=0x7f030001;
         public static final int activity_view=0x7f030002;
-        public static final int fragment_map=0x7f030003;
     }
     public static final class menu {
         public static final int main=0x7f0a0000;
         public static final int map=0x7f0a0001;
-        public static final int view=0x7f0a0002;
+        public static final int map_view=0x7f0a0002;
+        public static final int view=0x7f0a0003;
     }
     public static final class raw {
         public static final int gtm_analytics=0x7f040000;
@@ -653,6 +652,7 @@ containing a value of this type.
         public static final int store_picture_title=0x7f060000;
         public static final int temperature=0x7f06002b;
         public static final int title_activity_map=0x7f060032;
+        public static final int title_activity_map_view=0x7f060033;
         public static final int title_activity_view=0x7f060031;
         public static final int view_button=0x7f06002d;
         /**  Text on a placeholder buy button when Google Play services is not

@@ -14,5 +14,6 @@
     <string name="no_address_found">Unknown Location</string>
     <string name="title_activity_view">View Previous Readings</string>
     <string name="title_activity_map">MapActivity</string>
+    <string name="title_activity_map_view">Map View</string>
 
 </resources>
