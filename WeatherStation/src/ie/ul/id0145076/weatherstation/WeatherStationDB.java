@@ -131,6 +131,140 @@ public class WeatherStationDB {
 		  return outputArray.toArray(new String[outputArray.size()]);
   }
   
+  public String[] getAllLat() {
+
+	  ArrayList<String> outputArray = new ArrayList<String>();
+	  String[] result_columns = new String[] { KEY_LAT}; 
+		    
+	  
+	
+	  double latitude;
+	  
+	    String where = null;
+	    String whereArgs[] = null;
+	    String groupBy = null;
+	    String having = null;
+	    String order = null;
+	    
+	    SQLiteDatabase db = moduleDBOpenHelper.getWritableDatabase();
+	    Cursor cursor = db.query(ModuleDBOpenHelper.DATABASE_TABLE, 
+	                             result_columns, where,
+	                             whereArgs, groupBy, having, order);
+	    //
+	    boolean result = cursor.moveToFirst();
+		  while (result) {
+			  
+			  latitude = cursor.getDouble(cursor.getColumnIndex(KEY_LAT));
+			 
+			  
+			  outputArray.add(""+latitude);
+			  result=cursor.moveToNext();
+
+			  }
+		  return outputArray.toArray(new String[outputArray.size()]);
+  }
+  
+  public String[] getAllLng() {
+
+	  ArrayList<String> outputArray = new ArrayList<String>();
+	  String[] result_columns = new String[] { KEY_LONG}; 
+		    
+	  
+	
+	  double longitude;
+	 
+	  
+	    String where = null;
+	    String whereArgs[] = null;
+	    String groupBy = null;
+	    String having = null;
+	    String order = null;
+	    
+	    SQLiteDatabase db = moduleDBOpenHelper.getWritableDatabase();
+	    Cursor cursor = db.query(ModuleDBOpenHelper.DATABASE_TABLE, 
+	                             result_columns, where,
+	                             whereArgs, groupBy, having, order);
+	    //
+	    boolean result = cursor.moveToFirst();
+		  while (result) {
+			  
+			  longitude = cursor.getDouble(cursor.getColumnIndex(KEY_LONG));
+			 
+			  
+			  outputArray.add(""+longitude);
+			  result=cursor.moveToNext();
+
+			  }
+		  return outputArray.toArray(new String[outputArray.size()]);
+  }
+  
+  public String[] getAllPressure() {
+
+	  ArrayList<String> outputArray = new ArrayList<String>();
+	  String[] result_columns = new String[] { 
+		      KEY_PRESSURE_READING}; 
+		    
+	  
+	  String pressureReading;
+	 
+	  
+	    String where = null;
+	    String whereArgs[] = null;
+	    String groupBy = null;
+	    String having = null;
+	    String order = null;
+	    
+	    SQLiteDatabase db = moduleDBOpenHelper.getWritableDatabase();
+	    Cursor cursor = db.query(ModuleDBOpenHelper.DATABASE_TABLE, 
+	                             result_columns, where,
+	                             whereArgs, groupBy, having, order);
+	    //
+	    boolean result = cursor.moveToFirst();
+		  while (result) {
+			  pressureReading = cursor.getString(cursor.getColumnIndex(KEY_PRESSURE_READING));
+		
+			  
+			  outputArray.add(pressureReading);
+			  result=cursor.moveToNext();
+
+			  }
+		  return outputArray.toArray(new String[outputArray.size()]);
+  }
+  
+  public String[] getAllDate() {
+
+	  ArrayList<String> outputArray = new ArrayList<String>();
+	  String[] result_columns = new String[] { KEY_DATE}; 
+		    
+	  
+
+	  String date;
+
+	    String where = null;
+	    String whereArgs[] = null;
+	    String groupBy = null;
+	    String having = null;
+	    String order = null;
+	    
+	    SQLiteDatabase db = moduleDBOpenHelper.getWritableDatabase();
+	    Cursor cursor = db.query(ModuleDBOpenHelper.DATABASE_TABLE, 
+	                             result_columns, where,
+	                             whereArgs, groupBy, having, order);
+	    //
+	    boolean result = cursor.moveToFirst();
+		  while (result) {
+			  date = cursor.getString(cursor.getColumnIndex(KEY_DATE));
+			  
+			  outputArray.add(date);
+			  result=cursor.moveToNext();
+
+			  }
+		  return outputArray.toArray(new String[outputArray.size()]);
+  }
+  
+  
+  
+  
   /*
    * This is a helper class that takes a lot of the hassle out of using databases. Use as is and complete the following as required:
    * 	- DATABASE_TABLE
