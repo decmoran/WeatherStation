@@ -130,6 +130,11 @@ public class MainActivity extends Activity implements SensorEventListener, Locat
 				
 				//start map view as intent
 				Intent viewMapIntent = new Intent(getBaseContext(), MapViewActivity.class);
+				System.out.println("Main Avtivity Intent lat "+currentLocation.getLatitude());
+				System.out.println("Main Activity Intent LOng"+currentLocation.getLongitude());
+				viewMapIntent.putExtra("LAT", currentLocation.getLatitude());
+				
+				viewMapIntent.putExtra("LONG", currentLocation.getLongitude());
 				startActivity(viewMapIntent);
 				
 			}
@@ -206,6 +211,7 @@ public class MainActivity extends Activity implements SensorEventListener, Locat
 	{
 		weatherReading.setLonitude(location.getLongitude());
 		weatherReading.setLatitude(location.getLatitude());
+		currentLocation = location;
 		displayAddress(location);
 		
 		

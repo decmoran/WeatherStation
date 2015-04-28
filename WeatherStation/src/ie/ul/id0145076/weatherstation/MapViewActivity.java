@@ -16,11 +16,12 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class MapViewActivity extends FragmentActivity {
 	private WeatherStationDB weatherDB;
 	
+	private double lat;
+	private double lng;
 	
 	
 	//static final LatLng HAMBURG = new LatLng(53.558, 9.927);
 	//static final LatLng KIEL = new LatLng(53.551, 9.993);
-	//static final LatLng HERE = new LatLng();
 	private GoogleMap map;
 
 	@Override
@@ -28,11 +29,30 @@ public class MapViewActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_map_view);
 		
+		Bundle bundle = getIntent().getExtras();
+		
+		if(bundle != null)
+		{
+			lat = bundle.getDouble("LAT");
+			System.out.println("lat from bundle "+lat);
+			
+			lng = bundle.getDouble("LONG");
+			System.out.println("lng from bundle "+lng);
+			
+			
+		}
+		
+		
 		weatherDB = new WeatherStationDB(getApplicationContext());
 		map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
 		        .getMap();
 		
+		LatLng here = new LatLng(lat,lng);
 		
+		Marker thisLocation = map.addMarker(new MarkerOptions().position(here)
+		          .title("Current Location"));
+		map.moveCamera(CameraUpdateFactory.newLatLngZoom(here, 20));
+		map.animateCamera(CameraUpdateFactory.zoomTo(10), 2000, null);
 		
 		showAllReadings();
 		
@@ -73,7 +93,7 @@ public class MapViewActivity extends FragmentActivity {
 		for	(int i=0; i<length; i++)
 		{
 			myMarkers[i] = map.addMarker(new MarkerOptions()
-	        .position(new LatLng(lat[i],lng[i]))
+	        .position(new LatLng(lng[i],lat[i]))
 	        .title(date[i])
 	        .snippet(pressure[i])
 	        .icon(BitmapDescriptorFactory
