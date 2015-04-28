@@ -131,9 +131,9 @@ public class WeatherStationDB {
 		  return outputArray.toArray(new String[outputArray.size()]);
   }
   
-  public String[] getAllLat() {
+  public Double[] getAllLat() {
 
-	  ArrayList<String> outputArray = new ArrayList<String>();
+	  ArrayList<Double> outputArray = new ArrayList<Double>();
 	  String[] result_columns = new String[] { KEY_LAT}; 
 		    
 	  
@@ -157,16 +157,16 @@ public class WeatherStationDB {
 			  latitude = cursor.getDouble(cursor.getColumnIndex(KEY_LAT));
 			 
 			  
-			  outputArray.add(""+latitude);
+			  outputArray.add(latitude);
 			  result=cursor.moveToNext();
 
 			  }
-		  return outputArray.toArray(new String[outputArray.size()]);
+		  return outputArray.toArray(new Double[outputArray.size()]);
   }
   
-  public String[] getAllLng() {
+  public Double[] getAllLng() {
 
-	  ArrayList<String> outputArray = new ArrayList<String>();
+	  ArrayList<Double> outputArray = new ArrayList<Double>();
 	  String[] result_columns = new String[] { KEY_LONG}; 
 		    
 	  
@@ -191,11 +191,11 @@ public class WeatherStationDB {
 			  longitude = cursor.getDouble(cursor.getColumnIndex(KEY_LONG));
 			 
 			  
-			  outputArray.add(""+longitude);
+			  outputArray.add(longitude);
 			  result=cursor.moveToNext();
 
 			  }
-		  return outputArray.toArray(new String[outputArray.size()]);
+		  return outputArray.toArray(new Double[outputArray.size()]);
   }
   
   public String[] getAllPressure() {

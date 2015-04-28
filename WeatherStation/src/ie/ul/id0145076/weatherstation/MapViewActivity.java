@@ -18,9 +18,9 @@ public class MapViewActivity extends FragmentActivity {
 	
 	
 	
-	static final LatLng HAMBURG = new LatLng(53.558, 9.927);
-	static final LatLng KIEL = new LatLng(53.551, 9.993);
-	static final LatLng HERE = new LatLng();
+	//static final LatLng HAMBURG = new LatLng(53.558, 9.927);
+	//static final LatLng KIEL = new LatLng(53.551, 9.993);
+	//static final LatLng HERE = new LatLng();
 	private GoogleMap map;
 
 	@Override
@@ -34,23 +34,14 @@ public class MapViewActivity extends FragmentActivity {
 		
 		
 		
+		showAllReadings();
 		
-		
-		    Marker hamburg = map.addMarker(new MarkerOptions().position(HAMBURG)
-		        .title("Hamburg"));
-		    
-		    Marker kiel = map.addMarker(new MarkerOptions()
-		        .position(KIEL)
-		        .title("Kiel")
-		        .snippet("Kiel is cool")
-		        .icon(BitmapDescriptorFactory
-		            .fromResource(R.drawable.ic_launcher)));
 
 		    // Move the camera instantly to hamburg with a zoom of 15.
-		    map.moveCamera(CameraUpdateFactory.newLatLngZoom(HAMBURG, 15));
+		    //map.moveCamera(CameraUpdateFactory.newLatLngZoom(HAMBURG, 15));
 
 		    // Zoom in, animating the camera.
-		    map.animateCamera(CameraUpdateFactory.zoomTo(10), 2000, null);
+		   // map.animateCamera(CameraUpdateFactory.zoomTo(10), 2000, null);
 	}
 
 	@Override
@@ -72,7 +63,7 @@ public class MapViewActivity extends FragmentActivity {
 		return super.onOptionsItemSelected(item);
 	}
 	
-	private void display(String[] date, String[] pressure, String[] lat, String[] lng )
+	private void display(String[] date, String[] pressure, Double[] lat, Double[] lng )
 	{
 		int length = date.length;
 		Marker myMarkers[] = new Marker[length];
@@ -82,9 +73,9 @@ public class MapViewActivity extends FragmentActivity {
 		for	(int i=0; i<length; i++)
 		{
 			myMarkers[i] = map.addMarker(new MarkerOptions()
-	        .position(KIEL)
-	        .title("Kiel")
-	        .snippet("Kiel is cool")
+	        .position(new LatLng(lat[i],lng[i]))
+	        .title(date[i])
+	        .snippet(pressure[i])
 	        .icon(BitmapDescriptorFactory
 	            .fromResource(R.drawable.ic_launcher)));
 		}
