@@ -97,7 +97,7 @@ public class MapViewActivity extends FragmentActivity {
 	        .title(date[i])
 	        .snippet(pressure[i])
 	        .icon(BitmapDescriptorFactory
-	            .fromResource(R.drawable.ic_launcher)));
+	            .fromResource(R.drawable.barometer)));
 		}
 	}
 	private void showAllReadings()
