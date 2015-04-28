@@ -1,7 +1,5 @@
 package ie.ul.id0145076.weatherstation;
 
-
-
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -9,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -30,6 +27,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 public class MainActivity extends Activity implements SensorEventListener, LocationListener{
@@ -124,18 +122,31 @@ public class MainActivity extends Activity implements SensorEventListener, Locat
 			@Override
 			public void onClick(View v)
 			{
-				//start text-based view as intent
-				//Intent viewWeatherReadingIntent = new Intent(getBaseContext(), ViewActivity.class);
-				//startActivity(viewWeatherReadingIntent);
+				if (currentLocation != null)
+				{
+					//start text-based view as intent
+					//Intent viewWeatherReadingIntent = new Intent(getBaseContext(), ViewActivity.class);
+					//startActivity(viewWeatherReadingIntent);
+					
+					//start map view as intent
+					Intent viewMapIntent = new Intent(getBaseContext(), MapViewActivity.class);
+					
+					//Test Fields
+					//System.out.println("Main Avtivity Intent lat "+currentLocation.getLatitude());
+					//System.out.println("Main Activity Intent LOng"+currentLocation.getLongitude());
+					
+					viewMapIntent.putExtra("LAT", currentLocation.getLatitude());
+					viewMapIntent.putExtra("LONG", currentLocation.getLongitude());
+					startActivity(viewMapIntent);
+					
+				}
+				else
+				{
+					Toast.makeText(getApplicationContext(), R.string.location_update_wait, Toast.LENGTH_LONG).show();
+					
+					
+				}
 				
-				//start map view as intent
-				Intent viewMapIntent = new Intent(getBaseContext(), MapViewActivity.class);
-				System.out.println("Main Avtivity Intent lat "+currentLocation.getLatitude());
-				System.out.println("Main Activity Intent LOng"+currentLocation.getLongitude());
-				viewMapIntent.putExtra("LAT", currentLocation.getLatitude());
-				
-				viewMapIntent.putExtra("LONG", currentLocation.getLongitude());
-				startActivity(viewMapIntent);
 				
 			}
         });

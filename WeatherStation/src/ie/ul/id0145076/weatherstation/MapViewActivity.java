@@ -14,14 +14,10 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapViewActivity extends FragmentActivity {
-	private WeatherStationDB weatherDB;
 	
+	private WeatherStationDB weatherDB;
 	private double lat;
 	private double lng;
-	
-	
-	//static final LatLng HAMBURG = new LatLng(53.558, 9.927);
-	//static final LatLng KIEL = new LatLng(53.551, 9.993);
 	private GoogleMap map;
 
 	@Override
@@ -51,17 +47,11 @@ public class MapViewActivity extends FragmentActivity {
 		
 		Marker thisLocation = map.addMarker(new MarkerOptions().position(here)
 		          .title("Current Location"));
-		map.moveCamera(CameraUpdateFactory.newLatLngZoom(here, 20));
-		map.animateCamera(CameraUpdateFactory.zoomTo(10), 2000, null);
+		map.moveCamera(CameraUpdateFactory.newLatLngZoom(here, 15));
+		map.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
 		
 		showAllReadings();
-		
-
-		    // Move the camera instantly to hamburg with a zoom of 15.
-		    //map.moveCamera(CameraUpdateFactory.newLatLngZoom(HAMBURG, 15));
-
-		    // Zoom in, animating the camera.
-		   // map.animateCamera(CameraUpdateFactory.zoomTo(10), 2000, null);
+	
 	}
 
 	@Override
@@ -97,7 +87,7 @@ public class MapViewActivity extends FragmentActivity {
 	        .title(date[i])
 	        .snippet(pressure[i])
 	        .icon(BitmapDescriptorFactory
-	            .fromResource(R.drawable.barometer100)));
+	            .fromResource(R.drawable.atmospressure100)));
 		}
 	}
 	private void showAllReadings()
