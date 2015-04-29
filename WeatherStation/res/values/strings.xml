@@ -16,5 +16,7 @@
     <string name="title_activity_map">MapActivity</string>
     <string name="title_activity_map_view">View All Readings</string>
     <string name="location_update_wait">Location Updating. Please Wait.</string>
+    <string name="start_intent">Start</string>
+    <string name="stop_intent">Stop</string>
 
 </resources>
