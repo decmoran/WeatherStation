@@ -482,7 +482,7 @@ containing a value of this type.
         public static final int powered_by_google_light=0x7f020026;
     }
     public static final class id {
-        public static final int action_settings=0x7f0b0021;
+        public static final int action_settings=0x7f0b001f;
         public static final int adjust_height=0x7f0b0000;
         public static final int adjust_width=0x7f0b0001;
         public static final int book_now=0x7f0b0010;
@@ -508,8 +508,6 @@ containing a value of this type.
         public static final int satellite=0x7f0b0005;
         public static final int selectionDetails=0x7f0b000d;
         public static final int slide=0x7f0b0017;
-        public static final int start=0x7f0b001f;
-        public static final int stop=0x7f0b0020;
         public static final int store=0x7f0b001b;
         public static final int strict_sandbox=0x7f0b000b;
         public static final int temperature=0x7f0b0019;
@@ -657,8 +655,6 @@ containing a value of this type.
         public static final int pressure=0x7f06002a;
         public static final int save_button=0x7f06002c;
         public static final int service_not_available=0x7f06002e;
-        public static final int start_intent=0x7f060035;
-        public static final int stop_intent=0x7f060036;
         public static final int store_picture_message=0x7f060001;
         public static final int store_picture_title=0x7f060000;
         public static final int temperature=0x7f06002b;
