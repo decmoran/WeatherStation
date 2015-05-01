@@ -262,6 +262,38 @@ public class WeatherStationDB {
 		  return outputArray.toArray(new String[outputArray.size()]);
   }
   
+  public String[] getPastPressure(String yesterday) {
+
+	  ArrayList<String> outputArray = new ArrayList<String>();
+	  String[] result_columns = new String[] { 
+		      KEY_PRESSURE_READING}; 
+		    
+	  
+	  	String pressureReading;
+	 
+	  	String where = KEY_DATE + "= ?";
+	    String whereArgs[] = {yesterday};
+	    String groupBy = null;
+	    String having = null;
+	    String order = null;
+	    
+	    SQLiteDatabase db = moduleDBOpenHelper.getWritableDatabase();
+	    Cursor cursor = db.query(ModuleDBOpenHelper.DATABASE_TABLE, 
+	                             result_columns, where,
+	                             whereArgs, groupBy, having, order);
+	    //
+	    boolean result = cursor.moveToFirst();
+		  while (result) {
+			  pressureReading = cursor.getString(cursor.getColumnIndex(KEY_PRESSURE_READING));
+		
+			  
+			  outputArray.add(pressureReading);
+			  result=cursor.moveToNext();
+
+			  }
+		  return outputArray.toArray(new String[outputArray.size()]);
+  }
+  
   
   
   

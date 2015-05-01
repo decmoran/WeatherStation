@@ -7,9 +7,11 @@
     <uses-sdk
         android:minSdkVersion="17"
         android:targetSdkVersion="21" />
-    <permission 
+
+    <permission
         android:name="ie.ul.id0145076.weatherstation.permission.MAPS_RECEIVE"
-        android:protectionLevel="signature"></permission>
+        android:protectionLevel="signature" >
+    </permission>
 
     <uses-permission android:name="ie.ul.id0145076.permission.MAPS_RECEIVE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -49,13 +51,17 @@
 
         <!-- Goolge API Key -->
         <meta-data
-    		android:name="com.google.android.gms.version"
-    		android:value="@integer/google_play_services_version" />
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyDd8cmDGPEGq9lNgpJOmIj8MnkLDOA2n7M" />
 
-        
+        <receiver
+            android:name=".AutomaticReadings"
+            android:enabled="true"
+            android:exported="true" >
+        </receiver>
     </application>
 
 </manifest>

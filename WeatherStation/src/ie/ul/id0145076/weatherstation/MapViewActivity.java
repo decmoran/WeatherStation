@@ -30,10 +30,10 @@ public class MapViewActivity extends FragmentActivity {
 		if(bundle != null)
 		{
 			lat = bundle.getDouble("LAT");
-			System.out.println("lat from bundle "+lat);
+			
 			
 			lng = bundle.getDouble("LONG");
-			System.out.println("lng from bundle "+lng);
+			
 			
 			
 		}

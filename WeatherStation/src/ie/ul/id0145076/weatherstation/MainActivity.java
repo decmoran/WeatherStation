@@ -3,7 +3,9 @@ package ie.ul.id0145076.weatherstation;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -11,6 +13,7 @@ import java.util.Locale;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -28,17 +31,25 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
 public class MainActivity extends Activity implements SensorEventListener, LocationListener{
-	
+
+	public enum PressureStatus{
+		FALLING, STABLE, RISING
+	}
 	//min time and distance for GPS updates
 	public static final float MIN_DISTANCE = 10; //10 meters
 	public static final long MIN_TIME = 35000;// 35 seconds
 	protected static final String TAG = "addr";
 	Location currentLocation;
+	
+	//Barometer level
+	public static final double LOW_LIMIT = 1009.14;
+	public static final double HIGH_LIMIT = 1022.69;
 	
 	//sensor managers
 	private LocationManager mLocationManager;
@@ -48,9 +59,10 @@ public class MainActivity extends Activity implements SensorEventListener, Locat
 	private Sensor mPressure;
 	private TextView displayLocation;
 	private TextView viewPressure;
+	private ImageView displayWeather;
 	private Button saveButton;
 	private Button viewButton;
-	private Menu myMenu;
+	PressureStatus status;
 	
 	//Database object
 	private WeatherStationDB weatherDB;
@@ -71,14 +83,14 @@ public class MainActivity extends Activity implements SensorEventListener, Locat
         //GUI elements
         displayLocation = (TextView) findViewById(R.id.location);
         viewPressure = (TextView) findViewById(R.id.pressure);
+        displayWeather = (ImageView) findViewById(R.id.weather);
         saveButton = (Button) findViewById(R.id.store);
         viewButton = (Button) findViewById(R.id.view);
         weatherReading = new WeatherReading();
         
         //Get location
         mLocationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        //lastKnownLocation = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-        //displayAddress(lastKnownLocation);//fast-fix location using provider last known location
+       
         
         mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
         mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
@@ -96,26 +108,16 @@ public class MainActivity extends Activity implements SensorEventListener, Locat
         //Setup date string
         Date date = new Date();
         String today = DateFormat.getDateInstance().format(date);
+        
 		
 		weatherReading.setDate(today);//set todays date in weatherReading object
-		
-		//Test object fields
-		//System.out.println(weatherReading.getPressure());
-		//System.out.println(weatherReading.getDate());
-		//System.out.println(weatherReading.getLonitude());
-		//System.out.println(weatherReading.getLatitude());
-        
 		
 		//save button Listener
         saveButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v)
 			{
-				//Test object fields
-				//System.out.println(weatherReading.getPressure());
-				//System.out.println(weatherReading.getDate());
-				//System.out.println(weatherReading.getLonitude());
-				//System.out.println(weatherReading.getLatitude());
+				
 				weatherDB.addRow(weatherReading.getPressure(),weatherReading.getDate() , weatherReading.getLonitude(), weatherReading.getLatitude());
 			}
         });
@@ -133,11 +135,6 @@ public class MainActivity extends Activity implements SensorEventListener, Locat
 					
 					//start map view as intent
 					Intent viewMapIntent = new Intent(getBaseContext(), MapViewActivity.class);
-					
-					//Test Fields
-					//System.out.println("Main Avtivity Intent lat "+currentLocation.getLatitude());
-					//System.out.println("Main Activity Intent LOng"+currentLocation.getLongitude());
-					
 					viewMapIntent.putExtra("LAT", currentLocation.getLatitude());
 					viewMapIntent.putExtra("LONG", currentLocation.getLongitude());
 					startActivity(viewMapIntent);
@@ -145,7 +142,7 @@ public class MainActivity extends Activity implements SensorEventListener, Locat
 				}
 				else
 				{
-					Toast.makeText(getApplicationContext(), R.string.location_update_wait, Toast.LENGTH_LONG).show();
+					Toast.makeText(getApplicationContext(), R.string.location_update_wait, Toast.LENGTH_LONG).show(); //show toast if location not fixed yet 
 					
 					
 				}
@@ -229,8 +226,10 @@ public class MainActivity extends Activity implements SensorEventListener, Locat
 		
 		float sensorValue = event.values[0];
 			    
-		viewPressure.setText(new DecimalFormat("##.## hPa").format(sensorValue));
+		viewPressure.setText(new DecimalFormat("##.##").format(sensorValue));
 		weatherReading.setPressure(viewPressure.getText().toString());	
+		calcRiseFall(sensorValue);
+		predictWeather(sensorValue);
 		
 	}
 	
@@ -315,6 +314,73 @@ public class MainActivity extends Activity implements SensorEventListener, Locat
 		
 		
 	}
+	
 
+	public void calcRiseFall(float reading)
+	{
+		//get yesterdays date and format correctly
+		DateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy");
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.DATE, -1);
+		String yesterday = dateFormat.format(cal.getTime());
+		String [] result = weatherDB.getPastPressure(yesterday);
+		 if (result.length == 0)
+		 {
+			 status = PressureStatus.STABLE;
+		 }
+		 else
+		 {
+			 double lastRead = Double.parseDouble(result[0]);
+			 if (lastRead < reading  )
+			 {
+				 status = PressureStatus.FALLING;
+			 }
+			 else
+			 {
+				 status = PressureStatus.RISING;
+			 }
+			 
+		 }
+		 
+	}
+	
+	public void predictWeather(float reading)
+	{
+		//double reading = Double.parseDouble(weatherReading.getPressure());
+		if (reading < LOW_LIMIT )
+		{
+			if(status==PressureStatus.STABLE || status==PressureStatus.FALLING)
+			{
+				//set image
+				displayWeather.setImageBitmap(BitmapFactory.decodeResource(this.getResources(), R.drawable.rain));
+			}
+			else
+			{
+				displayWeather.setImageBitmap(BitmapFactory.decodeResource(this.getResources(), R.drawable.overcast));
+			}	
+		}else if (reading >= LOW_LIMIT && reading <= HIGH_LIMIT ){
+			
+			if(status==PressureStatus.RISING || status==PressureStatus.STABLE)
+			{
+				displayWeather.setImageBitmap(BitmapFactory.decodeResource(this.getResources(), R.drawable.suncloud));
+			}
+			else
+			{
+				displayWeather.setImageBitmap(BitmapFactory.decodeResource(this.getResources(), R.drawable.overcast));
+			}
+		}else if (reading >= HIGH_LIMIT){
+			
+			if(status==PressureStatus.RISING || status==PressureStatus.STABLE)
+			{
+				displayWeather.setImageBitmap(BitmapFactory.decodeResource(this.getResources(), R.drawable.sunny));
+			}
+			else
+			{
+				displayWeather.setImageBitmap(BitmapFactory.decodeResource(this.getResources(), R.drawable.suncloud));
+			}
+		}
+			
+	}
+	
 
 }
