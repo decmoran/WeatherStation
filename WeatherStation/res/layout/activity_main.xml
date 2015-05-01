@@ -42,7 +42,6 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="60dp"
         android:layout_marginLeft="28dp"
-        android:layout_toRightOf="@+id/imageView1"
         android:text="@string/save_button" />
 
     <Button

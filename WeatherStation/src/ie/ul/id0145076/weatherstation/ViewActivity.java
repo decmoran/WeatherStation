@@ -1,3 +1,12 @@
+/**
+ * ****REPLACED  WITH***  MapViewActivity.java  ****REPLACED  WITH****
+ * 
+*ViewActivity.java - 	This is an activity to display the content of the database in text format. It has been replaced with the MapViewActivity.java
+*
+*@author Declan Moran - 0145076		
+*@version 1.0										 
+*/
+
 package ie.ul.id0145076.weatherstation;
 
 import android.app.Activity;

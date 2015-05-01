@@ -1,3 +1,12 @@
+/**
+*WeatherStationDB.java - 	This is the database class to build the database to store the pressure readings.
+*							It also contains methods initiate SQL queries on the database.
+*
+*						
+*
+*@author Declan Moran - 0145076		
+*@version 1.0										 
+*/
 package ie.ul.id0145076.weatherstation;
 
 
@@ -15,85 +24,101 @@ import android.util.Log;
 public class WeatherStationDB {
 	
 
-	/*********************    Definition of table columns ***********************************************/
+	/*Define tables*/
   //The index (key) column name for use in where clauses.
   public static final String KEY_ID = "_id";
   
-  //The name and column index of each column in your database.
-  //These should be descriptive.
-  public static final String KEY_PRESSURE_READING =  
-		  "pressure_reading";
-  public static final String KEY_DATE =
-		  "date";
-  public static final String KEY_LAT = 
-		  "latitude";
-  public static final String KEY_LONG =
-		  "Longitude";
+  //The name of each column in the database.
+  public static final String KEY_PRESSURE_READING = "pressure_reading";
+  public static final String KEY_DATE = "date";
+  public static final String KEY_LAT = "latitude";
+  public static final String KEY_LONG = "Longitude";
   
   // Database open/upgrade helper
   private ModuleDBOpenHelper moduleDBOpenHelper;
 
-  /************************    Constructor ***************************************************************/
+ //construct the database
   public WeatherStationDB(Context context) {
-    moduleDBOpenHelper = new ModuleDBOpenHelper(context, ModuleDBOpenHelper.DATABASE_NAME, null, 
-                                              ModuleDBOpenHelper.DATABASE_VERSION);
+    moduleDBOpenHelper = new ModuleDBOpenHelper(context, ModuleDBOpenHelper.DATABASE_NAME, null, ModuleDBOpenHelper.DATABASE_VERSION);
     
-    // populate the database with some data in case it is empty
+    // add test reading to database
     if (getAll().length == 0) {
 	    this.addRow("0000.00", "27/03/2015", 0000.000f, 0000.000f);
 	    
     }
   }
   
-/************************    Standard Database methods *************************************************/
+  /*Database Methods for inserting and retrieving data from database*/
   
-  // Called when you no longer need access to the database.
+  // close the database
   public void closeDatabase() {
     moduleDBOpenHelper.close();
   }
 
+  /** 
+	 * public void addRow(String pressure, String date, double latitude, double longitude)
+	 * 
+	 * method to insert new row of data to database.
+	 * 
+	 * @param pressure pressure reading to insert
+	 * @param date current date to insert
+	 * @param latitude latitude to insert
+	 * @param longitude longitude to insert
+	 */
   public void addRow(String pressure, String date, double latitude, double longitude) {
-      // Create a new row of values to insert.
+     
 	    ContentValues newValues = new ContentValues();
 	  
-	    // Assign values for each row.
+	    // add the values to each row
 	    newValues.put(KEY_PRESSURE_READING, pressure);
 	    newValues.put(KEY_DATE, date);
 	    newValues.put(KEY_LAT, latitude);
 	    newValues.put(KEY_LONG, longitude);
 	    
-	    // Insert the row into your table
+	    // SQL query to insert data into database table
 	    SQLiteDatabase db = moduleDBOpenHelper.getWritableDatabase();
 	    db.insert(ModuleDBOpenHelper.DATABASE_TABLE, null, newValues); 
   }
   
+  /** 
+ 	 *   public void deleteRow(int idNr)
+ 	 * 
+ 	 * delete the specified row of the database
+ 	 * 
+ 	 * @param idNr the key of the row to delete
+ 	 */
   public void deleteRow(int idNr) {
-    // Specify a where clause that determines which row(s) to delete.
-    // Specify where arguments as necessary.
+  
+	//construct query to delete the row
     String where = KEY_ID + "=" + idNr;
     String whereArgs[] = null;
   
-    // Delete the rows that match the where clause.
+    // execute query
     SQLiteDatabase db = moduleDBOpenHelper.getWritableDatabase();
     db.delete(ModuleDBOpenHelper.DATABASE_TABLE, where, whereArgs);
   }
   
+  /** 
+	 *    public void deleteAll())
+	 * 
+	 * delete the database
+	 * 
+	 */
   public void deleteAll() {
 	  String where = null;
 	    String whereArgs[] = null;
 	  
-	    // Delete the rows that match the where clause.
+	    //execute delete query
 	    SQLiteDatabase db = moduleDBOpenHelper.getWritableDatabase();
 	    db.delete(ModuleDBOpenHelper.DATABASE_TABLE, where, whereArgs);
   }
 
-  /************************    User specific database queries *******************************************/
-   
-  /*
-   * Obtain all database entries and return as human readable content in a String array
-   * A query with all fields set to null will result in the whole database being returned
-   * The following SQL query is implemented: SELECT * FROM  Beers
-   */
+  /** 
+ 	 * public String[] getAll()
+ 	 * 
+ 	 * return database contents
+ 	 * 
+ 	 */
   public String[] getAll() {
 
 	  ArrayList<String> outputArray = new ArrayList<String>();
@@ -116,7 +141,7 @@ public class WeatherStationDB {
 	    Cursor cursor = db.query(ModuleDBOpenHelper.DATABASE_TABLE, 
 	                             result_columns, where,
 	                             whereArgs, groupBy, having, order);
-	    //
+	   
 	    boolean result = cursor.moveToFirst();
 		  while (result) {
 			  pressureReading = cursor.getString(cursor.getColumnIndex(KEY_PRESSURE_READING));
@@ -131,6 +156,12 @@ public class WeatherStationDB {
 		  return outputArray.toArray(new String[outputArray.size()]);
   }
   
+  /** 
+	 * public Double[] getAllLat()
+	 * 
+	 * return all latitude readings
+	 * 
+	 */
   public Double[] getAllLat() {
 
 	  ArrayList<Double> outputArray = new ArrayList<Double>();
@@ -164,6 +195,12 @@ public class WeatherStationDB {
 		  return outputArray.toArray(new Double[outputArray.size()]);
   }
   
+  /** 
+	 * public Double[] getAllLng()
+	 * 
+	 * return all longitude readings
+	 * 
+	 */
   public Double[] getAllLng() {
 
 	  ArrayList<Double> outputArray = new ArrayList<Double>();
@@ -198,6 +235,13 @@ public class WeatherStationDB {
 		  return outputArray.toArray(new Double[outputArray.size()]);
   }
   
+  
+  /** 
+	 * String[] getAllPressure()
+	 * 
+	 * return all pressure readings
+	 * 
+	 */
   public String[] getAllPressure() {
 
 	  ArrayList<String> outputArray = new ArrayList<String>();
@@ -230,7 +274,13 @@ public class WeatherStationDB {
 			  }
 		  return outputArray.toArray(new String[outputArray.size()]);
   }
-  
+ 
+  /** 
+ 	 * public String[] getAllDate()
+ 	 * 
+ 	 * return all date items
+ 	 * 
+ 	 */
   public String[] getAllDate() {
 
 	  ArrayList<String> outputArray = new ArrayList<String>();
@@ -262,6 +312,13 @@ public class WeatherStationDB {
 		  return outputArray.toArray(new String[outputArray.size()]);
   }
   
+  /** 
+	 *  public String[] getPastPressure(String yesterday)
+	 * 
+	 * return all pressure readings from the previous day
+	 * 
+	 * @param yesterday string with the previous days date
+	 */
   public String[] getPastPressure(String yesterday) {
 
 	  ArrayList<String> outputArray = new ArrayList<String>();
@@ -297,19 +354,14 @@ public class WeatherStationDB {
   
   
   
-  /*
-   * This is a helper class that takes a lot of the hassle out of using databases. Use as is and complete the following as required:
-   * 	- DATABASE_TABLE
-   * 	- DATABASE_CREATE 
-   */
+  /*Create the database and table*/
   private static class ModuleDBOpenHelper extends SQLiteOpenHelper {
 	    
 	    private static final String DATABASE_NAME = "myDatabase.db";
 	    private static final String DATABASE_TABLE = "Weather";
 	    private static final int DATABASE_VERSION = 1;
 	    
-	    // SQL Statement to create a new database.
-	    //III. Add volume column to database
+	    // build SQL statement to create table
 	    private static final String DATABASE_CREATE = "create table " +
 	      DATABASE_TABLE + " (" + KEY_ID +
 	      " integer primary key autoincrement, " +

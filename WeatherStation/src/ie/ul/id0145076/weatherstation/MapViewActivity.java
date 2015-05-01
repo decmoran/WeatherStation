@@ -1,3 +1,15 @@
+/**
+*MapViewActivity.java - This is the MapView Activity which zooms to the users current location and displays all the recorded
+*						pressure readings from the database on the Google map on the location of their recording.
+*
+*						Each record is displayed as a marker with a custom icon and upon clicking the icon it displays the date 
+*						and pressure recorded.
+*						
+*
+*@author Declan Moran - 0145076	
+*@version 1.0											 
+*/
+
 package ie.ul.id0145076.weatherstation;
 
 import android.os.Bundle;
@@ -15,6 +27,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapViewActivity extends FragmentActivity {
 	
+	//Strings for lat and long bundle items
+	protected static final String LATITUDE = "LAT";
+	protected static final String LONGITUDE = "LONG";
+	
 	private WeatherStationDB weatherDB;
 	private double lat;
 	private double lng;
@@ -29,27 +45,27 @@ public class MapViewActivity extends FragmentActivity {
 		
 		if(bundle != null)
 		{
-			lat = bundle.getDouble("LAT");
-			
-			
-			lng = bundle.getDouble("LONG");
-			
-			
-			
+			lat = bundle.getDouble(LATITUDE);
+			lng = bundle.getDouble(LONGITUDE);
 		}
 		
-		
+		//create database object
 		weatherDB = new WeatherStationDB(getApplicationContext());
+		
+		//inflate map
 		map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
 		        .getMap();
 		
+		//create a LatLong object with the current location extracted from bundle
 		LatLng here = new LatLng(lat,lng);
 		
-		Marker thisLocation = map.addMarker(new MarkerOptions().position(here)
-		          .title("Current Location"));
+		//add a marker on the map with the current location
+		Marker thisLocation = map.addMarker(new MarkerOptions().position(here).title("Current Location"));
+		//zoom to current location
 		map.moveCamera(CameraUpdateFactory.newLatLngZoom(here, 15));
 		map.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
 		
+		//display database records
 		showAllReadings();
 	
 	}
@@ -73,8 +89,19 @@ public class MapViewActivity extends FragmentActivity {
 		return super.onOptionsItemSelected(item);
 	}
 	
+	/** 
+	 * private void display(String[] date, String[] pressure, Double[] lat, Double[] lng )
+	 * 
+	 * creates an array of markers to display on map. each marker contains a record from the database
+	 * 
+	 * @param date array of dates from database
+	 * @param pressure array of pressure values from database
+	 * @param lat array of latitudes from database
+	 * @param lng array of Longitudes from database
+	 */
 	private void display(String[] date, String[] pressure, Double[] lat, Double[] lng )
 	{
+		//length variable for marker array size
 		int length = date.length;
 		Marker myMarkers[] = new Marker[length];
 		
@@ -83,13 +110,18 @@ public class MapViewActivity extends FragmentActivity {
 		for	(int i=0; i<length; i++)
 		{
 			myMarkers[i] = map.addMarker(new MarkerOptions()
-	        .position(new LatLng(lng[i],lat[i]))
-	        .title(date[i])
-	        .snippet(pressure[i])
-	        .icon(BitmapDescriptorFactory
-	            .fromResource(R.drawable.atmospressure100)));
+	        .position(new LatLng(lng[i],lat[i]))//create new location and set marker to this position
+	        .title(date[i])//set the date as the marker title
+	        .snippet(pressure[i])//set the snippet text to the pressure reading
+	        .icon(BitmapDescriptorFactory.fromResource(R.drawable.atmospressure100)));//set marker custom icon
 		}
 	}
+	
+	/** 
+	 * private void showAllReadings()
+	 * 
+	 *retrive all records from the database and display them using the display method
+	 */
 	private void showAllReadings()
 	{
 		display(weatherDB.getAllDate(), weatherDB.getAllPressure(), weatherDB.getAllLat(), weatherDB.getAllLng());
